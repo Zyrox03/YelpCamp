@@ -20,7 +20,7 @@ const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const passportLocal = require('passport-local');
 
-const dbUrl = "mongodb://127.0.0.1:27017/ZyroxCamp"
+const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/ZyroxCamp"
 mongoose.set('strictQuery', true);
 main().catch(err => console.log(err));
 
@@ -48,11 +48,11 @@ app.use(
   }),
 );
 
-
+const secret = process.env.SECRET || 'Supersecretsecret'
 
 const sessionConfig = {
   name : "session",
-  secret: 'Supersecretsecret',
+  secret,
   store: MongoStore.create({ mongoUrl: dbUrl , touchAfter: 24 * 3600  }),
   resave: false,
   saveUninitialized: true,
